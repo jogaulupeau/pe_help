@@ -1,0 +1,35 @@
+{% block head %}
+<link rel="stylesheet" href="/media/cj/table.css">
+{% endblock %}
+
+
+{% block content %}
+<h1>Journée du {{jour}}/{{mois}}/{{annee}}</h1>
+<table>
+    <thead><tr>
+         <th>Créneau</th>
+         <th>Domaine</th>
+         <th>Compétence</th>
+         <th>Objectif</th>
+         <th>Activité</th>
+         <th>Bilan</th>
+    </tr></thead>
+    <tbody>
+{% for i in creneaux %}
+    <tr>
+        <td rowspan='2'>{{ i }}</td>
+        <td>{{ i.activite.objectif.all.0.competence.domaine }}</td>
+        <td>{{ i.activite.objectif.all.0.competence }}</td>
+        <td>{{ i.activite.objectif.all.0 }}</td>
+        <td rowspan='2'>{{ i.activite.titre }}</td>
+        <td rowspan='2'>{{ i.bilan }}</td>
+    </tr>
+    <tr>
+        <td>{{ i.activite.objectif.all.1.competence.domaine }}</td>
+        <td>{{ i.activite.objectif.all.1.competence }}</td>
+        <td>{{ i.activite.objectif.all.1 }}</td>
+    </tr>
+{% endfor %}
+    </tbody>
+</table>
+{% endblock %}

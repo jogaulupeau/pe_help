@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>{{object|capfirst}}</h1>
+<div class='form'>
+<form action='/cj/activite/{% if o.id %}{{o.id}}{% else %}0{% endif %}/' method='post'>
+{% csrf_token %}
+{{ form.as_p }}
+<input type='submit' value='Valider !'>
+</form>
+</div>
+{% endblock %}
