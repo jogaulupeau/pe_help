@@ -2,6 +2,7 @@
 from django.db import models
 from django.forms import ModelForm
 from cahier_journal.widgets import ColorPickerWidget
+from datetime import timedelta
 
 
 class ColorField(models.CharField):
@@ -36,15 +37,14 @@ class Domaine(models.Model):
                   )
     titre = models.CharField(max_length=250)
     niveau = models.CharField(max_length=50, choices=NIVEAUX, blank=True, null=True)
+    couleur = ColorField(blank=True, null=True)
     def __unicode__(self):
         return self.titre
 
 
 class Competence(models.Model):
     titre = models.CharField(max_length=250)
-    #parent = models.ForeignKey('self', blank=True, null=True)
     domaine = models.ForeignKey(Domaine)
-    couleur = ColorField(blank=True, null=True)
     def __unicode__(self):
         return self.titre
     class Meta:
@@ -70,9 +70,13 @@ class Activite(models.Model):
 class Creneau(models.Model):
     date_debut = models.DateTimeField()
     duree = models.TimeField()
+    date_fin = models.DateTimeField(blank=True, null=True)
     activite = models.ForeignKey(Activite, related_name='creneaux')
     groupe = models.CharField(max_length=100, blank=True, null=True)
     bilan = models.TextField(blank=True, null=True)
+    def save(self):
+        self.date_fin = self.date_debut + timedelta(seconds = self.duree.minute * 60 + self.duree.hour * 3600)
+        super(Creneau, self).save()
     def __unicode__(self):
         return self.date_debut.strftime('%d/%m/%y %H:%M')
     class Meta:
@@ -99,6 +103,7 @@ class ActiviteForm(ModelForm):
         model = Activite
 
 
-class CreaneauForm(ModelForm):
+class CreneauForm(ModelForm):
     class Meta:
         model = Creneau
+        exclude = ('date_fin')

@@ -19,9 +19,9 @@ class ColorPickerWidget(forms.TextInput):
         self.language = language or settings.LANGUAGE_CODE[:2]
         super(ColorPickerWidget, self).__init__(attrs=attrs)
 
-        def render(self, name, value, attrs=None):
-            rendered = super(ColorPickerWidget, self).render(name, value, attrs)
-            return rendered + mark_safe(u'''<script type="text/javascript">
-                                        j('#id_%s').colorPicker();
-                                        </script>''' % name)
+    def render(self, name, value, attrs=None):
+        rendered = super(ColorPickerWidget, self).render(name, value, attrs)
+        return rendered + mark_safe(u'''<script type="text/javascript">
+                                    jQuery('#id_%s').colorPicker();
+                                    </script>''' % name)
 

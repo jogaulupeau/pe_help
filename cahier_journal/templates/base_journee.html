@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+
 {% block head %}
 <link rel="stylesheet" href="/media/cj/table.css">
 {% endblock %}
@@ -8,6 +10,7 @@
 <table>
     <thead><tr>
          <th>Créneau</th>
+         <th>Groupe</th>
          <th>Domaine</th>
          <th>Compétence</th>
          <th>Objectif</th>
@@ -16,19 +19,37 @@
     </tr></thead>
     <tbody>
 {% for i in creneaux %}
-    <tr>
-        <td rowspan='2'>{{ i }}</td>
-        <td>{{ i.activite.objectif.all.0.competence.domaine }}</td>
-        <td>{{ i.activite.objectif.all.0.competence }}</td>
-        <td>{{ i.activite.objectif.all.0 }}</td>
-        <td rowspan='2'>{{ i.activite.titre }}</td>
-        <td rowspan='2'>{{ i.bilan }}</td>
-    </tr>
-    <tr>
-        <td>{{ i.activite.objectif.all.1.competence.domaine }}</td>
-        <td>{{ i.activite.objectif.all.1.competence }}</td>
-        <td>{{ i.activite.objectif.all.1 }}</td>
-    </tr>
+    {% if i.activite.objectif.all|length > 1 %}
+        {% for p in i.activite.objectif.all %}
+            {% if forloop.first %}
+                <tr>
+                    <td rowspan='{{ i.activite.objectif.all|length }}'><a href='/cj/creneau/{{ i.id }}/'>{{ i.date_debut|date:'H:i' }}<br>{{ i.date_fin|date:'H:i' }}</a></td>
+                    <td rowspan='{{ i.activite.objectif.all|length }}'>{{ i.groupe }}</td>
+                    <td><font color='{{ p.competence.domaine.couleur }}'>{{ p.competence.domaine }}</font></td>
+                    <td>{{ p.competence }}</td>
+                    <td>{{ p }}</td>
+                    <td rowspan='{{ i.activite.objectif.all|length }}'><a href='/cj/activite/{{ i.activite.id }}/'>{{ i.activite.titre }}</a></td>
+                    <td rowspan='{{ i.activite.objectif.all|length }}'>{{ i.bilan }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td><font color='{{ p.competence.domaine.couleur }}'>{{ p.competence.domaine }}</font></td>
+                    <td>{{ p.competence }}</td>
+                    <td>{{ p }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td><a href='/cj/creneau/{{ i.id }}/'>{{ i.date_debut|date:'H:i' }}<br>{{ i.date_fin|date:'H:i' }}</a></td>
+            <td>{{ i.groupe }}</td>
+            <td><font color='{{ i.activite.objectif.all.0.competence.domaine.couleur }}'>{{ i.activite.objectif.all.0.competence.domaine }}</font></td>
+            <td>{{ i.activite.objectif.all.0.competence }}</td>
+            <td>{{ i.activite.objectif.all.0 }}</td>
+            <td><a href='/cj/activite/{{ i.activite.id }}/'>{{ i.activite.titre }}</a></td>
+            <td>{{ i.bilan }}</td>
+        </tr>
+    {% endif %}
 {% endfor %}
     </tbody>
 </table>
