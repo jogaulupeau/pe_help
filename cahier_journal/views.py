@@ -1,7 +1,18 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from cahier_journal.models import *
+from django.core import serializers
+
+def getjson(request, object, id_parent):
+    if object == 'competence':
+        liste = Competence.objects.filter(domaine__pk__exact=id_parent)
+    if object == 'objectif':
+        liste = Objectif.objects.filter(competence__pk__exact=id_parent)
+    data = {}
+    for i in liste:
+        data[i.pk] = i
+    return HttpResponse(serializers.serialize("json", liste))
 
 def show(request, object, id):
     if object == 'activite':
@@ -49,6 +60,7 @@ def show(request, object, id):
             'form': form,
             'o': o,
             'object': object,
+            'domaines': Domaine.objects.all(),
     })
 
 
@@ -59,4 +71,12 @@ def journee(request, annee, mois, jour):
             'annee': annee,
             'mois': mois,
             'jour': jour,
+    })
+
+
+def objectif(request):
+    return render(request, 'base_objectif.html', {
+            'objectifs': Objectif.objects.all(),
+            'domaines': Domaine.objects.all(),
+            'competences': Competence.objects.all(),
     })

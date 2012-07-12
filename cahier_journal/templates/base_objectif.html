@@ -1,8 +1,6 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<script type="text/javascript" src="{{ MEDIA_URL }}commun/jquery.colorPicker.js"></script>
-<link rel="stylesheet" media="screen" type="text/css" title="Design" href="{{ MEDIA_URL }}commun/colorPicker.css" />
 <script type="text/javascript" src="{{ MEDIA_URL }}commun/update_select.js" ></script>
 <script>
 $(document).ready(function() {
@@ -15,24 +13,13 @@ $(document).ready(function() {
             UpdateSelect(s[this.id], this.value);
         }
     });
-    //A AMELIORER
-    var sel = [];
-    $('#objectif').change(function() {
-        sel.push(this.value);
-        $('#id_objectif').val(sel);
-    });
-    ////
 });
 </script>
 {% endblock %}
 
+
+
 {% block content %}
-<h1>{{object|capfirst}}</h1>
-<div class='form'>
-<form action='/cj/{{ object }}/{% if o.id %}{{o.id}}{% else %}0{% endif %}/' method='post'>
-{% csrf_token %}
-{{ form.as_p }}
-{% if object == 'activite' %}
 <select id='domaine'>
 {% for i in domaines %}<option value='{{ i.pk }}'>{{ i }}</option>{% endfor %}
 </select>
@@ -40,8 +27,4 @@ $(document).ready(function() {
 </select>
 <select id='objectif'>
 </select>
-{% endif %}
-<input type='submit' value='Valider !'>
-</form>
-</div>
 {% endblock %}
