@@ -1,10 +1,21 @@
 <html>
 <head>
 <script type="text/javascript" src="{{ MEDIA_URL }}commun/jquery.min.js" ></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}commun/js/jquery-ui-1.8.21.custom.min.js"></script>
+<link rel="stylesheet" media="screen" type="text/css" title="Design" href="{{ MEDIA_URL }}commun/css/ui-lightness/jquery-ui-1.8.21.custom.css" />
+<script>
+$(document).ready(function() {
+    $('#datepicker').datepicker();
+    $('#datepicker').change(function(data) {
+        location.replace('/cj/journee/' + $('#datepicker').val().split('/')[2] + '/' + $('#datepicker').val().split('/')[0] + '/' + $('#datepicker').val().split('/')[1] + '/');
+    });
+});
+</script>
 {% block head %}{% endblock %}
 </head>
 <body>
 <div id='header'><a href='/cj/journee/'>Journées</a> - <a href='/cj/creneau/'>Scéances</a> - <a href='/cj/domaine/'>Domaines</a> - <a href='/cj/competence/'>Compétences</a> - <a href = '/cj/objectif/'>Objectifs</a> - <a href ='/cj/activite/'>Activités</a></div>
 {% block content %}{% endblock %}
+<div id='footer'><p>Changer de journée : <input id='datepicker' type='text'></p></div>
 </body>
 </html>
