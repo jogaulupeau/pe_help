@@ -3,6 +3,7 @@ from django.db import models
 from django.forms import ModelForm
 from cahier_journal.widgets import ColorPickerWidget
 from datetime import timedelta
+from django import forms
 
 
 class ColorField(models.CharField):
@@ -83,6 +84,7 @@ class Creneau(models.Model):
         verbose_name = 'créneau'
         verbose_name_plural = 'créneaux'
 
+
 class DomaineForm(ModelForm):
     class Meta:
         model = Domaine
@@ -101,6 +103,7 @@ class ObjectifForm(ModelForm):
 class ActiviteForm(ModelForm):
     class Meta:
         model = Activite
+        #widgets = { 'objectif': forms.HiddenInput(), }
 
 
 class CreneauForm(ModelForm):

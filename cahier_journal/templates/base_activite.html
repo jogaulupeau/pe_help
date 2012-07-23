@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<script type="text/javascript" src="{{ MEDIA_URL }}commun/jquery.colorPicker.js"></script>
+<link rel="stylesheet" media="screen" type="text/css" title="Design" href="{{ MEDIA_URL }}commun/colorPicker.css" />
+<script type="text/javascript" src="{{ MEDIA_URL }}commun/update_select.js" ></script>
+<script>
+var sel = [];
+{% for s in o.objectif.all %}
+    sel.push({
+        'domaine' : ['{{ s.competence.domaine.titre }}', '{{ s.competence.domaine.pk }}'],
+        'competence' : ['{{ s.competence.titre }}', '{{ s.competence.pk }}'],
+        'objectif' : ['{{ s.titre }}', '{{ s.pk }}']
+    });
+{% endfor %}
+function del(sel_id){
+    sel.splice(sel_id,1);
+    calculeSel();
+}
+
+function calculeSel(){
+    $('#selection').text('');
+    var w = []
+    for (s in sel){
+        $('#selection').append('<img src="{{ MEDIA_URL }}commun/delete.png" href="#" onClick="del(' + s + ');"> ' + sel[s].domaine[0] + ' - ' + sel[s].competence[0] + ' - ' + sel[s].objectif[0] + '<br>');
+        w.push(sel[s].objectif[1]);
+    }
+    $('#id_objectif').val(w);
+}
+
+$(document).ready(function() {
+    calculeSel();
+    $('#id_objectif').parent().toggle();
+    $('select').change(function(data) {
+        var s = {
+            'domaine' : 'competence',
+            'competence' : 'objectif'
+            };
+        if (this.id in s){
+            UpdateSelect(s[this.id], this.value);
+        }
+    });
+    //A AMELIORER
+    $('#add').click(function() {
+        sel.push({
+            'domaine' : [$('#domaine option:selected').text(), $('#domaine option:selected').val()],
+            'competence' : [$('#competence option:selected').text(), $('#competence option:selected').val()],
+            'objectif' : [$('#objectif option:selected').text(), $('#objectif option:selected').val()]
+        });
+        calculeSel();
+    });
+    ////
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h1>{{object|capfirst}}</h1>
+<div class='form'>
+<form action='/cj/{{ object }}/{% if o.id %}{{o.id}}{% else %}0{% endif %}/' method='post'>
+{% csrf_token %}
+{{ form.as_p }}
+<div id='selection'>
+</div>
+<select id='domaine'>
+<option value='0'></option>
+{% for i in domaines %}<option value='{{ i.pk }}'>{{ i }}</option>{% endfor %}
+</select>
+<select id='competence'>
+</select>
+<select id='objectif'>
+</select>
+<input type='button' id='add' value='Ajouter'>
+<br><input type='submit' value='Valider !'>
+</form>
+</div>
+{% endblock %}

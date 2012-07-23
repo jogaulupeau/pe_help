@@ -22,8 +22,19 @@ def show(request, object, id):
             o = Activite()
         if request.POST:
             form = ActiviteForm(request.POST, instance = o)
+            if form.is_valid():
+                form.save()
+                o = form.instance
         else:
             form = ActiviteForm(instance = o)
+        return render(request, 'base_activite.html', {
+            'form': form,
+            'o': o,
+            'object': object,
+            'domaines': Domaine.objects.all(),
+            'competences': Competence.objects.all(),
+            'objectifs': Objectif.objects.all(),
+        })
     elif object == 'creneau':
         try:
             o = Creneau.objects.get(pk=id)
@@ -60,7 +71,6 @@ def show(request, object, id):
             'form': form,
             'o': o,
             'object': object,
-            'domaines': Domaine.objects.all(),
     })
 
 
