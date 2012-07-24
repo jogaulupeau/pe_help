@@ -6,6 +6,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}commun/update_select.js" ></script>
 <script>
 var sel = [];
+{% if o.pk %}
 {% for s in o.objectif.all %}
     sel.push({
         'domaine' : ['{{ s.competence.domaine.titre }}', '{{ s.competence.domaine.pk }}'],
@@ -13,6 +14,7 @@ var sel = [];
         'objectif' : ['{{ s.titre }}', '{{ s.pk }}']
     });
 {% endfor %}
+{% endif %}
 function del(sel_id){
     sel.splice(sel_id,1);
     calculeSel();
@@ -71,7 +73,7 @@ $(document).ready(function() {
 <select id='objectif'>
 </select>
 <input type='button' id='add' value='Ajouter'>
-<br><input type='submit' value='Valider !'>
+<br><input type='submit' value='Enregistrer !'>
 </form>
 </div>
 {% endblock %}

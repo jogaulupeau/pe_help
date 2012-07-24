@@ -110,3 +110,6 @@ class CreneauForm(ModelForm):
     class Meta:
         model = Creneau
         exclude = ('date_fin')
+        widgets = {'date_debut': forms.DateTimeInput(attrs={'class': 'datetimepicker'}),
+                    'duree': forms.TimeInput(attrs={'class': 'timepicker'}),
+        }

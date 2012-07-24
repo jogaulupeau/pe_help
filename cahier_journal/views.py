@@ -62,6 +62,15 @@ def show(request, object, id):
             form = DomaineForm(request.POST, instance = o)
         else:
             form = DomaineForm(instance = o)
+    elif object == 'objectif':
+        try:
+            o = Objectif.objects.get(pk=id)
+        except Objectif.DoesNotExist:
+            o = Objectif()
+        if request.POST:
+            form = ObjectifForm(request.POST, instance = o)
+        else:
+            form = ObjectifForm(instance = o)
     if request.method=='POST':
         if form.is_valid():
             form.save()

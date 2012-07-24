@@ -2,7 +2,24 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ MEDIA_URL }}commun/jquery.colorPicker.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}commun/js/jquery-ui-timepicker-addon.js"></script>
 <link rel="stylesheet" media="screen" type="text/css" title="Design" href="{{ MEDIA_URL }}commun/colorPicker.css" />
+<link rel="stylesheet" media="screen" type="text/css" title="Design" href="{{ MEDIA_URL }}commun/css/jquery-ui-timepicker-addon.css" />
+<script>
+$(document).ready(function() {
+    $('.datetimepicker').datetimepicker({
+        stepMinute: 10,
+        hourMin: 8,
+        hourMax: 17,
+        dateFormat: 'dd/mm/yy',
+        timeFormat: 'hh:mm:ss',
+    });
+    $('.timepicker').timepicker({
+        stepMinute: 5,
+        timeFormat: 'hh:mm:ss',
+    });
+});
+</script>
 {% endblock %}
 
 {% block content %}

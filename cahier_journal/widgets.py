@@ -24,4 +24,3 @@ class ColorPickerWidget(forms.TextInput):
         return rendered + mark_safe(u'''<script type="text/javascript">
                                     jQuery('#id_%s').colorPicker();
                                     </script>''' % name)
-
